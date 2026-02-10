@@ -1,0 +1,74 @@
+/* 1. Make the Card Float */
+
+.card {
+    border: none;
+    border-radius: 15px;
+    /* Softer, modern corners */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    /* Soft, expensive-looking shadow */
+    overflow: hidden;
+    /* Ensures the header doesn't poke out of the rounded corners */
+}
+
+
+/* 2. The Header (Dark & Professional) */
+
+
+/* We use specificity here to beat Bootstrap */
+
+.table thead th {
+    background-color: #343a40;
+    /* Dark slate color */
+    color: #ffffff;
+    border: none;
+    padding: 18px;
+    /* More breathing room */
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    /* Makes caps look cleaner */
+}
+
+
+/* 3. The Rows */
+
+.table tbody td {
+    padding: 18px;
+    vertical-align: middle;
+    color: #444;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 500;
+}
+
+
+/* 4. The "Pop" Hover Effect */
+
+.table tbody tr {
+    transition: all 0.2s ease-in-out;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.01);
+    /* Tiny zoom effect when you hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    position: relative;
+    /* Needed for z-index to work */
+}
+
+
+/* 5. The Price Tag (Green Pill) */
+
+.price-tag {
+    font-weight: bold;
+    color: #0f5132;
+    /* Dark green text */
+    background-color: #d1e7dd;
+    /* Light green background */
+    padding: 6px 14px;
+    border-radius: 20px;
+    /* Pill shape */
+    display: inline-block;
+    font-size: 13px;
+}

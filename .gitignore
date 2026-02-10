@@ -1,0 +1,14 @@
+# Ignore the Virtual Environment (Too big)
+my_venv/
+venv/
+env/
+
+# Ignore Database (We don't want to upload your local data)
+db.sqlite3
+
+# Ignore Compiled Python files (Junk)
+*.pyc
+__pycache__/
+
+# Ignore Secrets (Passwords)
+.env
