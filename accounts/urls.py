@@ -4,6 +4,10 @@ from . import views
 urlpatterns = [
     path('', views.home, name="home"),
     path('products/', views.products, name="products"),
-    # Add <str:pk> to the URL. 'pk' stands for Primary Key (ID)
     path('customer/<str:pk>/', views.customer, name="customer"),
+
+    # --- Add these new paths ---
+    path('create_customer/', views.createCustomer, name="create_customer"),
+    path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
+    path('delete_order/<str:pk>/', views.deleteOrder, name="delete_order"),
 ]
