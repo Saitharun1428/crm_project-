@@ -1,84 +1,118 @@
 {% extends 'accounts/main.html' %} {% block content %}
 
-<br>
-<div class="row">
-    <div class="col">
-        <div class="card text-center text-white bg-primary mb-3">
-            <div class="card-header">Total Orders</div>
-            <div class="card-body">
-                <h3 class="card-title">{{ total_orders }}</h3>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card h-100 p-3 position-relative overflow-hidden">
+            <div class="d-flex justify-content-between align-items-start z-1">
+                <div>
+                    <h6 class="text-uppercase mb-1" style="font-size: 0.75rem; color: #e2e8f0; font-weight: bold;">Total Orders</h6>
+                    <h2 class="fw-bold text-white mb-0">{{ total_orders }}</h2>
+                </div>
+                <span class="badge-glass status-out-for-delivery">+12%</span>
+            </div>
+            <div style="height: 60px; margin-top: 10px;">
+                <canvas id="sparkTotal" width="300" height="60"></canvas>
             </div>
         </div>
     </div>
 
-    <div class="col">
-        <div class="card text-center text-white bg-success mb-3">
-            <div class="card-header">Orders Delivered</div>
-            <div class="card-body">
-                <h3 class="card-title">{{ delivered }}</h3>
+    <div class="col-md-4">
+        <div class="card h-100 p-3 position-relative overflow-hidden">
+            <div class="d-flex justify-content-between align-items-start z-1">
+                <div>
+                    <h6 class="text-uppercase mb-1" style="font-size: 0.75rem; color: #e2e8f0; font-weight: bold;">Delivered</h6>
+                    <h2 class="fw-bold text-white mb-0">{{ delivered }}</h2>
+                </div>
+                <span class="badge-glass status-delivered">Completed</span>
+            </div>
+            <div style="height: 60px; margin-top: 10px;">
+                <canvas id="sparkDelivered" width="300" height="60"></canvas>
             </div>
         </div>
     </div>
 
-    <div class="col">
-        <div class="card text-center text-white bg-warning mb-3">
-            <div class="card-header">Orders Pending</div>
-            <div class="card-body">
-                <h3 class="card-title">{{ pending }}</h3>
+    <div class="col-md-4">
+        <div class="card h-100 p-3 position-relative overflow-hidden">
+            <div class="d-flex justify-content-between align-items-start z-1">
+                <div>
+                    <h6 class="text-uppercase mb-1" style="font-size: 0.75rem; color: #e2e8f0; font-weight: bold;">Pending</h6>
+                    <h2 class="fw-bold text-white mb-0">{{ pending }}</h2>
+                </div>
+                <span class="badge-glass status-pending">Action Req.</span>
+            </div>
+            <div style="height: 60px; margin-top: 10px;">
+                <canvas id="sparkPending" width="300" height="60"></canvas>
             </div>
         </div>
     </div>
 </div>
 
-<br>
-
 <div class="row">
-    <div class="col-md-5">
-        <h5>CUSTOMERS:</h5>
-        <hr>
-        <div class="card card-body">
-            <a class="btn btn-primary btn-sm btn-block" href="">Create Customer</a>
-            <table class="table table-sm">
-                <tr>
-                    <th></th>
-                    <th>Customer</th>
-                    <th>Phone</th>
-                </tr>
-
-                {% for customer in customers %}
-                <tr>
-                    <td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.id %}">View</a></td>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.phone }}</td>
-                </tr>
-                {% endfor %}
-
-            </table>
+    <div class="col-md-7 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Recent Transactions</span>
+                <button class="btn btn-sm btn-primary">View All</button>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td class="fw-medium text-white">{{ order.product }}</td>
+                                <td>{{ order.date_created }}</td>
+                                <td>
+                                    <span class="badge-glass status-pill">{{ order.status }}</span>
+                                </td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-secondary" style="border-color: rgba(255,255,255,0.2);" href="{% url 'update_order' order.id %}">Edit</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-7">
-        <h5>LAST 5 ORDERS:</h5>
-        <hr>
-        <div class="card card-body">
-            <table class="table table-sm">
-                <tr>
-                    <th>Product</th>
-                    <th>Date Ordered</th>
-                    <th>Status</th>
-                    <th>Update</th>
-                    <th>Remove</th>
-                </tr>
-                {% for order in orders %}
-                <tr>
-                    <td>{{ order.product }}</td>
-                    <td>{{ order.date_created }}</td>
-                    <td>{{ order.status }}</td>
-                    <td><a class="btn btn-sm btn-info" href="">Update</a></td>
-                    <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>
-                </tr>
-                {% endfor %}
-            </table>
+    <div class="col-md-5 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Key Clients</span>
+                <a class="btn btn-sm btn-primary" href="{% url 'create_customer' %}">+ Add</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <tbody>
+                        {% for customer in customers %}
+                        <tr>
+                            <td width="50">
+                                <div style="width: 35px; height: 35px; background: rgba(255,255,255,0.1); border-radius: 50%; display:flex; align-items:center; justify-content:center;">
+                                    👤
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-white">{{ customer.name }}</div>
+                                <div class="small text-muted">{{ customer.phone }}</div>
+                            </td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-info" href="{% url 'customer' customer.id %}">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

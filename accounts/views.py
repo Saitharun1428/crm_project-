@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import * # Import your database tables
+from .models import * # from .forms import OrderForm  <-- Uncomment this later when you add forms
 
 def home(request):
     orders = Order.objects.all()
@@ -26,14 +26,28 @@ def products(request):
     return render(request, 'accounts/products.html', {'products': products})
 
 def customer(request, pk):
-    # 1. Get the specific customer by ID
     customer = Customer.objects.get(id=pk)
-
-    # 2. Get the orders related to this customer (Reverse relationship)
     orders = customer.order_set.all()
-    
-    # 3. Count their total orders
     order_count = orders.count()
 
     context = {'customer': customer, 'orders': orders, 'order_count': order_count}
     return render(request, 'accounts/customer.html', context)
+
+# --- NEW FUNCTIONS ADDED BELOW TO FIX THE ERROR ---
+
+def createCustomer(request):
+    # Placeholder: Just renders the dashboard for now to prevent crashing
+    # Later you will add: return render(request, 'accounts/customer_form.html', context)
+    return redirect('home')
+
+def createOrder(request, pk):
+    # Placeholder
+    return redirect('home')
+
+def updateOrder(request, pk):
+    # Placeholder
+    return redirect('home')
+
+def deleteOrder(request, pk):
+    # Placeholder
+    return redirect('home')
