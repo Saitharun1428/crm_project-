@@ -1,3 +1,5 @@
+import json
+import time
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import * # from .forms import OrderForm  <-- Uncomment this later when you add forms
@@ -62,17 +64,37 @@ def deleteOrder(request, pk):
 # --- VULNERABLE ENDPOINT FOR ASSIGNMENT ---
 @csrf_exempt
 def vulnerable_import(request):
+    """
+    SECURED VIEW: 
+    This endpoint now uses JSON instead of Pickle. 
+    JSON only parses static data structures and cannot execute arbitrary code.
+    """
     if request.method == 'POST':
         try:
-            # The server expects a base64 encoded byte stream
-            encoded_data = request.body
-            decoded_data = base64.b64decode(encoded_data)
+            # THE BRICK WALL: We now expect JSON.
+            # If the attacker sends a base64 pickle payload, this line will fail and crash safely.
+            preferences = json.loads(request.body)
             
-            # THE VULNERABILITY: Unpickling untrusted data directly
-            preferences = pickle.loads(decoded_data) 
-            
-            return JsonResponse({"status": "success", "message": "Data imported."})
-        except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+            return JsonResponse({"status": "success", "message": "Data securely imported."})
+        
+        except json.JSONDecodeError:
+            # The payload is caught and rejected here, BEFORE any code can be executed.
+            return JsonResponse({"status": "error", "message": "Invalid JSON format. Potential attack blocked."}, status=400)
             
     return JsonResponse({"status": "error", "message": "Only POST requests allowed."}, status=405)
+
+@csrf_exempt
+def legacy_import_honeypot(request):
+    """
+    DECEPTION VIEW: 
+    This looks like an old, forgotten, vulnerable API endpoint. 
+    It intentionally wastes the attacker's time and returns a fake success message.
+    """
+    if request.method == 'POST':
+        # Tarpitting: Pause the server for 5 seconds to slow down automated hacking tools
+        time.sleep(5)
+        
+        # Deception: Throw the data in the trash, but tell the attacker it worked
+        return JsonResponse({"status": "success", "message": "Legacy preferences loaded."})
+        
+    return JsonResponse({"status": "error", "message": "Only POST allowed"}, status=405)
