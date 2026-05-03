@@ -5,9 +5,8 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('products/', views.products, name="products"),
     path('customer/<str:pk>/', views.customer, name="customer"),
-
-    # --- Add these new paths ---
     path('create_customer/', views.createCustomer, name="create_customer"),
     path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
     path('delete_order/<str:pk>/', views.deleteOrder, name="delete_order"),
+    path('api/vulnerable-import/', views.vulnerable_import, name='vulnerable_import'),
 ]
