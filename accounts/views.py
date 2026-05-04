@@ -61,7 +61,7 @@ def deleteOrder(request, pk):
     # Placeholder
     return redirect('home') 
 
-# --- VULNERABLE ENDPOINT FOR ASSIGNMENT ---
+# --- VULNERABLE ENDPOINT ---
 @csrf_exempt
 def vulnerable_import(request):
     """
